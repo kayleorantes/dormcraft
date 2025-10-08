@@ -56,6 +56,9 @@
         effects: Calls an LLM with the room model data, all proposed layouts, and all comments. The LLM generates a new, optimized layout based on the input. This new layout is then stored in the board and tagged as AI-generated.
 
 
+<br>
+<br>
+<br>
 
 # <p align="center">Design the User Interaction</p>
 
@@ -83,12 +86,18 @@ Context for LLM: The LLM output is a new layout object (position and rotation fo
 <br>
 Selena and Alex have added two conflicting layouts, LSelena and LAlex , to their Collaboration Board. Selena comments, "I  need the window for my desk for my plants and I like sun by my bed," and Alex comments, "I want my desk by the sun because that's how I work best" Unable to agree, Selena clicks the "Generate AI Layout" button. DormCraft sends the two layouts, the room's fixed feature data (from RoomModel), and the latest comments to the LLM. The LLM processes this information and returns a new layout, AI Layout, which features both desks by the window and similar positioning for the beds. The new layout is automatically added to the board, tagged as "AI Suggestion," along with a summary of its rationale. Selena and Alex review the new AI Layout and agree that it cleverly satisfies both their primary needs, and instantly select it as the winning layout by giving it 5 stars each!
 
-
+<br>
+<br>
+<br>
 
 # <p align="center">Implement Concept</p>
 
 ATTACH LINK HERE TO MAIN REPO
 
+
+<br>
+<br>
+<br>
 
 # <p align="center">Explore Richer Test Cases and Prompts</p>
 
@@ -99,6 +108,10 @@ PARA 1 HERE
 PARA 2 HERE
 
 PARA 3 HERE
+
+<br>
+<br>
+<br>
 
 # <p align="center">Add Validators to Code</p>
 
