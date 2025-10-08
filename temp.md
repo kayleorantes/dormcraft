@@ -118,6 +118,7 @@ PARA 3 HERE
 
 **Issue: Obstruction of Fixed Features**
 <br>
+<br>
 Description: The AI places a piece of furniture in a fixed, non-negotiable area, such as blocking the door's swing arc, a window, or a vent. This makes the layout unusable.
 <br>
 <br>
@@ -129,6 +130,7 @@ Validator: check_fixed_feature_overlap(layout, room_features)
 <br>
 
 **Issue: Furniture Overlap or Wall Proximity**
+<br>
 <br>
 Description: The AI generates a layout where two pieces of furniture occupy the same space, or a piece of furniture is positioned partially outside the room's dimensions (e.g., x > room_width). This makes the layout physically impossible.
 <br>
@@ -142,6 +144,7 @@ Validator: check_physical_overlap_and_bounds(layout, room_dimensions)
 <br>
 
 **Issue: Hallucination of Unrequested Furniture**
+<br>
 <br>
 Description: The AI adds a piece of furniture that was not available in the FurnitureLibrary or was not requested for the room (e.g., adding a third bed in a double room). This makes the layout inaccurate to the available resources.
 <br>
