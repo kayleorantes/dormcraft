@@ -25,6 +25,8 @@
     - shareLink(board: Board): (url: String)
         effects: generates a shareable link for collaborators
 
+<br>
+<br>
 
 **AI-Augmented Version: Collaboration Board with AI**
 
