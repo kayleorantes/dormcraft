@@ -131,7 +131,6 @@ Description: The AI generates a layout where two pieces of furniture occupy the 
 Validator: check_physical_overlap_and_bounds(layout, room_dimensions)
 <br>
 - Overlap Check: Iterates through all pairs of furniture items and checks if their bounding boxes intersect.
-<br>
 - Boundary Check: Checks if any furniture item's coordinates and dimensions place it outside the room_dimensions (e.g., x position +x dimension >room_width). Throws an error if either condition is met.
 
 **Issue: Hallucination of Unrequested Furniture**
