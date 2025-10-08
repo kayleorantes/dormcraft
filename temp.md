@@ -66,7 +66,7 @@ Context for LLM: The LLM receives Layout A (Alex's preference), Layout B (Selena
 
 
 <p align="center">
-  <img src="/sketch1.jpg" alt="Sketch 1" width="60%" />
+  <img src="./sketch1.jpg" alt="Sketch 1" width="60%" />
 </p>
 
 **Sketch 2: AI Proposal**
