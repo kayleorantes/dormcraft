@@ -32,9 +32,6 @@ function loadConfig(): Config {
 const config = loadConfig();
 const API_KEY = config.apiKey; 
 
-//const API_KEY = "AIzaSyAh7oHAOuQLHLDdFLxZkeXp7SFxhd2HxJI"; 
-
-
 
 const userSelena: User = { name: "Selena" };
 const userAlex: User = { name: "Alex" };
