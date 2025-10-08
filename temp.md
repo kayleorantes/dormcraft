@@ -120,22 +120,31 @@ PARA 3 HERE
 <br>
 Description: The AI places a piece of furniture in a fixed, non-negotiable area, such as blocking the door's swing arc, a window, or a vent. This makes the layout unusable.
 <br>
+<br>
 Validator: check_fixed_feature_overlap(layout, room_features)
 <br>
 - Checks the coordinates of all placed furniture items against a list of "no-go zones" defined by the RoomModel (e.g., a door's swing arc, defined as a polygon or set of coordinates). If a piece of furniture overlaps with a no-go zone, it throws an error.
 
+<br>
+<br>
+
 **Issue: Furniture Overlap or Wall Proximity**
 <br>
 Description: The AI generates a layout where two pieces of furniture occupy the same space, or a piece of furniture is positioned partially outside the room's dimensions (e.g., x > room_width). This makes the layout physically impossible.
+<br>
 <br>
 Validator: check_physical_overlap_and_bounds(layout, room_dimensions)
 <br>
 - Overlap Check: Iterates through all pairs of furniture items and checks if their bounding boxes intersect.
 - Boundary Check: Checks if any furniture item's coordinates and dimensions place it outside the room_dimensions (e.g., x position +x dimension >room_width). Throws an error if either condition is met.
 
+<br>
+<br>
+
 **Issue: Hallucination of Unrequested Furniture**
 <br>
 Description: The AI adds a piece of furniture that was not available in the FurnitureLibrary or was not requested for the room (e.g., adding a third bed in a double room). This makes the layout inaccurate to the available resources.
+<br>
 <br>
 Validator: check_furniture_inventory(layout, required_furniture_list)
 <br>
