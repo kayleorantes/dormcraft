@@ -1,5 +1,8 @@
-import { GeminiLLM } from './gemini-llm'; //VERIFY PATH
+/**
+ * DormCraft Concept - AI Augmented Version
+ */
 
+import { GeminiLLM } from './gemini-llm';
 
 export interface User { name: string; }
 
@@ -171,6 +174,15 @@ export class AIAugmentedCollaborationBoard {
         this.roomModelID = roomModel.id;
         this.furnitureLibrary = furnitureLibrary;
         this.validator = new LayoutValidator(roomModel, furnitureLibrary);
+
+        if (llmApiKey === "DUMMY_API_KEY_FOR_TESTS") {
+            console.warn("⚠️ Using DUMMY API Key. LLM will return mocked responses.");
+            // You might need a specialized mock client here if the real GeminiLLM
+            // throws an error with a dummy key, but for this assignment, 
+            // the conditional logic in the real client's executeLLM should suffice.
+        }
+
+        
         this.llmClient = new GeminiLLM({ apiKey: llmApiKey }); // Initialize client
     }
 

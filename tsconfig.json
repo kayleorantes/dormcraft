@@ -20,9 +20,9 @@
     "*.ts"
   ],
   "files": [
-    "dayplanner.ts",
+    "dormcraft.ts",
     "gemini-llm.ts",
-    "dayplanner-tests.ts"
+    "dormcraft_tests.ts"
   ],
   "exclude": [
     "node_modules",
