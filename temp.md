@@ -66,7 +66,7 @@ Context for LLM: The LLM receives Layout A (Alex's preference), Layout B (Selena
 
 
 <p align="center">
-  <img src="../assets/sketch1" alt="Sketch 1" width="60%" />
+  <img src="sketch1" alt="Sketch 1" width="60%" />
 </p>
 
 **Sketch 2: AI Proposal**
@@ -74,7 +74,7 @@ Context for LLM: The LLM receives Layout A (Alex's preference), Layout B (Selena
 Context for LLM: The LLM output is a new layout object (position and rotation for all furniture) and a justification summary ("This layout provides a compromise for both desks to to be by the window to address Selena's light need and Alex's space concern").
 
 <p align="center">
-  <img src="../assets/sketch2" alt="Sketch 2" width="60%" />
+  <img src="./sketch2" alt="Sketch 2" width="60%" />
 </p>
 
 
