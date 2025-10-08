@@ -59,21 +59,34 @@
 
 # <p align="center">Design the User Interaction</p>
 
-temp sketch ideas rn
-Sketch 1: Conflict Detected
-Context for LLM: The LLM receives Layout A (Alex's preference), Layout B (Selena's preference), and the comments thread ("I need the window for my desk," "I want my bed bowered over the dresser for space," and the Room Model ID for dimensions).
-Annotation: Users are stuck between two layouts. A 'Suggest Layout' button appears, prompting an AI solution.
 
-Sketch 2: AI Proposal
-Context for LLM: The LLM output is a new layout object (position and rotation for all furniture) and a justification summary (e.g., "This layout lofts both beds to maximize floor space for two window-side desks, addressing Selena's light need and Alex's space concern").
-Annotation: The AI generates a new layout and presents it with a rationale. Users can now view, edit, or vote on this new option.
-
-Sketch 3: Resolution and Outcome
-Annotation: The AI layout moves to the voting system and is chosen by the users, resolving the conflict quickly and fairly.
+**Sketch 1: Conflict Detected**
+<br>
+Context for LLM: The LLM receives Layout A (Alex's preference), Layout B (Selena's preference),  the comments thread for both ("I need the window for my desk for my plants and I like sun by my bed," "I want my desk by the sun because that's how I work best,") and the Room Model ID for dimensions of that room.
 
 
+<p align="center">
+  <img src="../assets/sketch1" alt="Sketch 1" width="60%" />
+</p>
 
-User Journey:
+**Sketch 2: AI Proposal**
+<br>
+Context for LLM: The LLM output is a new layout object (position and rotation for all furniture) and a justification summary ("This layout provides a compromise for both desks to to be by the window to address Selena's light need and Alex's space concern").
+
+<p align="center">
+  <img src="../assets/sketch2" alt="Sketch 2" width="60%" />
+</p>
+
+
+
+
+**User Journey:**
+<br>
+FIX FIX FIX
+
+<br>
+<br>
+<br>
 Selena and Alex have added two conflicting layouts, LSelena and LAlex , to their Collaboration Board. Selena comments, "I must have the desk near the window," and Alex comments, "I need the floor space the closet alcove offers." Unable to agree, Selena clicks the "Ask AI for Compromise" button. DormCraft sends the two layouts, the room's fixed feature data (from RoomModel), and the latest comments to the LLM. The LLM processes this information and returns a new layout, LAI , which features both beds lofted to open up two desk spaces near the window, with the dressers stored under the lofts near the alcove. The new layout, LAI , is automatically added to the board, tagged as "AI Suggestion," along with a summary of its rationale. Selena and Alex review LAI , agree that it cleverly satisfies both their primary needs, and instantly select it as the winning layout, avoiding the need for a protracted vote.
 
 
