@@ -142,9 +142,11 @@ What Worked:
 <br>
 The LLM successfully returned a layout (L3) that satisfied the shared priority by enforcing the compromise placement for both desks, demonstrating the AI's power to translate abstract agreement (shared sun access) into a concrete, non-conflicting layout. 
 <br>
+<br>
 What Went Wrong: 
 <br>
 Initial prompts often failed due to the LLM placing furniture directly into the Y=14.5 no-go zone, requiring the explicit coordinate Y=10.5 in the final prompt. 
+<br>
 <br>
 Issues Remain: 
 <br>
@@ -165,9 +167,11 @@ Analysis:
 <br>
 This experiment was designed to prove the resilience of the system against a geometric impossibility. The layout deliberately placed the desk within the door_swing no-go zone (X<3.0,Y<3.0). 
 <br>
+<br>
 What Worked: 
 <br>
 The system correctly intercepted the layout with the error: Failed to add layout: [Validator 1] Furniture 'MIT Desk' placed in fixed feature zone 'door_swing'. This proves the checkFixedFeatureOverlap (Validator 1) is active and prevents physically unusable outputs, regardless of whether a human or AI proposes them. What Went Wrong: The failure was the goal of the test. 
+<br>
 <br>
 Issues Remain:
 <br>
@@ -188,13 +192,16 @@ Analysis
 <br>
 This test was designed to prove the system's resilience against resource violation—a common failure mode where an LLM may omit a required item to achieve a better aesthetic goal. 
 <br>
+<br>
 What Worked: 
 <br>
 The system correctly failed to add the layout with the error: Failed to add layout: [Validator 3] Layout must contain exactly 2 of item bed_twin_xl, but found 1. This confirms the checkFurnitureInventory (Validator 3) is active, ensuring all solutions (AI-generated or user-generated) adhere to the MIT Housing inventory list. 
 <br>
+<br>
 What Went Wrong: 
 <br>
 The failure was the goal of the test. 
+<br>
 <br>
 Issues Remain: 
 <br>
