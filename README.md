@@ -213,7 +213,7 @@ None, the test successfully confirms that resource and inventory constraints are
 
 # <p align="center">Add Validators to Code</p>
 
-Even with the well-specified prompts, LLMs are prone to generating coordinates that are logically or physically impossible. Our three implemented validators serve as the essential security and integrity layer that protects the DormCraft application from flawed AI output. 
+Even with the well-specified prompts, LLMs are prone to generating coordinates that are logically or physically impossible. The three implemented validators serve as the essential security and integrity layer that protects the DormCraft application from flawed AI output. 
 <br>
 
 1. Fixed Feature Obstruction: The AI is poor at spatial subtraction and may place furniture within the coordinates reserved for non-movable objects like the door swing, violating a fundamental constraint.
