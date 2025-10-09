@@ -1,12 +1,10 @@
- import { 
+import { 
     User, Furniture, RoomModel, FurniturePlacement, 
     Layout, AIAugmentedCollaborationBoard
 } from './dormcraft'; 
 
-
-
-
 import { GeminiLLM, Config } from './gemini-llm'; // Import the Config interface
+
 
 // --- Configuration Loading Function ---
 /**
@@ -14,6 +12,7 @@ import { GeminiLLM, Config } from './gemini-llm'; // Import the Config interface
  */
 function loadConfig(): Config {
     try {
+        // ASSUMPTION: config.json is in the current directory (./config.json)
         const config = require('./config.json'); 
         if (!config.apiKey) {
              throw new Error("config.json found but 'apiKey' is missing.");
@@ -27,11 +26,9 @@ function loadConfig(): Config {
 // --- End Configuration Function ---
 
 
-// --- 1. Setup Environment ---
-
+// --- 1. Setup Environment Variables ---
 const config = loadConfig();
 const API_KEY = config.apiKey; 
-
 
 const userSelena: User = { name: "Selena" };
 const userAlex: User = { name: "Alex" };
@@ -72,60 +69,54 @@ const VALID_FIXED_BASE_PLACEMENTS: FurniturePlacement[] = [
     { furnitureId: "dresser_mit", x: 3.5, y: 8.0, rotation: 0 },
 ];
 
-// --- Initialization ---
+// --- Initialization Function ---
+function initializeBoard(): AIAugmentedCollaborationBoard {
+    const board = new AIAugmentedCollaborationBoard(
+        "DORM_EC_301",
+        ROOM_MODEL_EAST_CAMPUS,
+        FURNITURE_LIBRARY,
+        API_KEY
+    );
+    board.users.add(userSelena);
+    board.users.add(userAlex);
+    return board;
+}
 
-// Pass the key to the board, which passes it to the GeminiLLM client.
-const board = new AIAugmentedCollaborationBoard(
-    "DORM_EC_301",
-    ROOM_MODEL_EAST_CAMPUS,
-    FURNITURE_LIBRARY,
-    API_KEY
-);
-board.users.add(userSelena);
-board.users.add(userAlex);
 
-// --- Test Case Functions ---
+// --- Test Case 1: Successful AI Resolution ---
 
-/**
- * Test case 1: Demonstrates the core AI augmentation loop.
- */
 export async function testAISuggestion(): Promise<void> {
+    const board = initializeBoard();
+    
     console.log('\n🧪 TEST CASE 1: AI-Assisted Conflict Resolution');
     console.log('==============================================');
 
-    // Reset board for clean execution
-    board.layouts = {};
-    board.comments = [];
+    // Clean start (layouts are reset in initializeBoard)
     
     const layoutSelena: Layout = { layoutId: "L_S", placements: [], creator: userSelena.name };
     const layoutAlex: Layout = { layoutId: "L_A", placements: [], creator: userAlex.name };
 
-    // Layout Selena: Conflicting Proposal 1 (Desk near window)
+    // Layout Selena: Conflicting Proposal 1
     layoutSelena.placements = [
         ...VALID_FIXED_BASE_PLACEMENTS,
-        // Desk 1 near window (X=0.5, Y=10.5 - SAFE from window_wall and door_swing)
-        { furnitureId: "desk_mit", x: 0.5, y: 10.5, rotation: 0 },  
-        // Desk 2 away (X=9.5, Y=10.5)
-        { furnitureId: "desk_mit", x: 9.5, y: 10.5, rotation: 0 },   
+        { furnitureId: "desk_mit", x: 0.5, y: 10.5, rotation: 0 },  // Desk 1 near window
+        { furnitureId: "desk_mit", x: 9.5, y: 10.5, rotation: 0 },   // Desk 2 away
     ];
-    // Layout Alex: Conflicting Proposal 2 (The same arrangement, claiming the same spot)
+    // Layout Alex: Conflicting Proposal 2
     layoutAlex.placements = [
         ...VALID_FIXED_BASE_PLACEMENTS,
-        // Desk 2 near window (X=0.5, Y=10.5 - Same spot, different claim)
-        { furnitureId: "desk_mit", x: 0.5, y: 10.5, rotation: 0 },  
-        // Desk 1 away (X=9.5, Y=10.5)
-        { furnitureId: "desk_mit", x: 9.5, y: 10.5, rotation: 0 },   
+        { furnitureId: "desk_mit", x: 0.5, y: 10.5, rotation: 0 },  // Desk 2 near window
+        { furnitureId: "desk_mit", x: 9.5, y: 10.5, rotation: 0 },   // Desk 1 away
     ];
     
-    board.addLayout(layoutSelena); // SHOULD NOW PASS ALL VALIDATORS
-    board.addLayout(layoutAlex);   // SHOULD NOW PASS ALL VALIDATORS (assuming identical layouts are treated as edits, or the validator skips duplicate geometry, allowing the core conflict to be about the *claim* to the spot, not the placement).
+    board.addLayout(layoutSelena);
+    board.addLayout(layoutAlex);
 
     board.comment(userSelena, "I need my desk by the window for my plants and sun for studying.");
     board.comment(userAlex, "I want my desk by the sun because that's how I work best!");
 
-    // Execute AI-Augmented Action
     console.log("\n[USER ACTION] Awaiting suggestLayout to resolve conflict...");
-    const aiLayout = await board.suggestLayout(); // SHOULD EXECUTE GEMINI CALL
+    const aiLayout = await board.suggestLayout();
 
     if (aiLayout) {
         console.log(`\n--- RESULT 1 ---`);
@@ -134,39 +125,42 @@ export async function testAISuggestion(): Promise<void> {
     }
 }
 
-/**
- * Test case 2: Demonstrates the failure modes of the LLM/Validation layer.
- */
-export async function testValidatorFailures(): Promise<void> {
-    console.log('\n🧪 TEST CASE 2: Validation Failure Modes');
-    console.log('=======================================');
-    
-    // --- SCENARIO 2A: VALIDATOR 1 FAILURE (Door Block) ---
-    console.log("\n--- 2A: Door Block (Fails Validator 1) ---");
+// --- Test Case 2: Validator 1 Failure (Door Block) ---
 
+export async function testValidator1Failure(): Promise<void> {
+    const board = initializeBoard();
+    
+    console.log('\n🧪 TEST CASE 2: Validation Failure - Door Block (V1)');
+    console.log('=====================================================');
+    
     // Start with a valid base set of 4 items
     const baseSetV1 = VALID_FIXED_BASE_PLACEMENTS.slice();
 
     // INTENDED FAILURE: Place a desk in the door swing (1.5, 1.5)
     baseSetV1.push({ furnitureId: "desk_mit", x: 1.5, y: 1.5, rotation: 0 }); 
-    // Add the second desk in a SAFE place
+    // Add the second desk in a SAFE place to satisfy inventory
     baseSetV1.push({ furnitureId: "desk_mit", x: 9.5, y: 10.0, rotation: 0 });
     
     const badLayoutV1: Layout = { layoutId: "L_BAD_V1", placements: baseSetV1, creator: userSelena.name };
 
     console.log("[USER ACTION] Attempting to add a layout that blocks the door...");
-    board.addLayout(badLayoutV1); // EXPECTED: Fail V1 on the desk at (1.5, 1.5)
+    board.addLayout(badLayoutV1); // EXPECTED: Fail V1
+}
 
+// --- Test Case 3: Validator 3 Failure (Missing Item/Hallucination) ---
 
-    // --- SCENARIO 2B: VALIDATOR 3 FAILURE (Hallucination/Missing Item) ---
-    console.log("\n--- 2B: Hallucination (Fails Validator 3) ---");
+export async function testValidator3Failure(): Promise<void> {
+    const board = initializeBoard();
+    
+    console.log('\n🧪 TEST CASE 3: Validation Failure - Missing Item (V3)');
+    console.log('========================================================');
 
     // Hallucinated Layout: Missing required furniture (only 1 bed, needs 2)
     const hallucinationPlacements: FurniturePlacement[] = [
         // Only ONE Bed: (Should be 2 - THIS IS THE INTENDED FAILURE)
         { furnitureId: "bed_twin_xl", x: 3.5, y: 0.5, rotation: 0 }, 
         
-        // Two Desks and Two Dressers (correct count for desks/dressers)
+        // Two Desks and Two Dressers (to satisfy the count for everything else)
         { furnitureId: "desk_mit", x: 9.5, y: 10.5, rotation: 0 },
         { furnitureId: "desk_mit", x: 0.5, y: 10.5, rotation: 0 },
         { furnitureId: "dresser_mit", x: 0.5, y: 3.5, rotation: 0 },
@@ -175,24 +169,25 @@ export async function testValidatorFailures(): Promise<void> {
     const hallucinationLayout: Layout = { layoutId: "L_HALL", placements: hallucinationPlacements, creator: userSelena.name };
 
     console.log("[USER ACTION] Attempting to add a layout with a missing required item...");
-    board.addLayout(hallucinationLayout); // EXPECTED: Fail V3 on the missing bed count.
+    board.addLayout(hallucinationLayout); // EXPECTED: Fail V3
 }
 
-/**
- * Main function to run all test cases
- */
+
+// --- Main Execution ---
+
 async function main(): Promise<void> {
     console.log('🎓 DormCraft AI Augmentation Test Suite');
     console.log('======================================\n');
     
     console.log("--- Initializing Test Suite ---");
-    console.log(`Collaboration Board for ${board.roomModelID} created.`);
     console.log(`Gemini API Key Status: ${API_KEY.length > 20 ? 'Active' : 'DUMMY/MOCKED (using internal logic)'}`);
     console.log("------------------------------");
 
     try {
+        // Run test cases sequentially
         await testAISuggestion();
-        await testValidatorFailures();
+        await testValidator1Failure();
+        await testValidator3Failure();
         
         console.log('\n🎉 All test cases completed successfully!');
         

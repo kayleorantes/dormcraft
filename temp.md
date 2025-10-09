@@ -105,17 +105,58 @@ ATTACH LINK HERE TO MAIN REPO
 
 TEST CASES IN REPO
 
-PARA 1 HERE
+**Test Case 1: AI-Assisted Conflict Resolution (Proving Synthesis)**
+<br>
+User Actions:
 
-PARA 2 HERE
+1. Roommates add conflicting layouts L1 and L2 (both place their desk in the prime window location). 
+2. Comments explicitly state the priority conflict: "need the window for my plants and sun for studying" vs. "want my desk by the sun." 3. User calls suggestLayout().
 
-PARA 3 HERE
+<br>
+Prompt Variant:
+
+Instruction: "The core conflict is that both users claim the single window spot. Generate a compromise layout where both desks are positioned along the Y=10.5 wall, allowing both users equal proximity to natural light. The beds must be against the Y=0.5 wall to maximize central flow."
+
+<br>
+
+Analysis:	
+Approach: This test validated the AI's ability to handle two identical, opposing claims. We used the prompt to enforce a synthesis solution by locking both desks to the shared preference zone (Y=10.5 wall). What Worked: The LLM successfully returned a layout (L3) that satisfied the shared priority by enforcing the compromise placement for both desks, demonstrating the AI's power to translate abstract agreement (shared sun access) into a concrete, non-conflicting layout. What Went Wrong: Initial prompts often failed due to the LLM placing furniture directly into the Y=14.5 no-go zone, requiring the explicit coordinate Y=10.5 in the final prompt. Issues Remain: The LLM still requires the code's post-generation validators to ensure the coordinates are perfectly safe and non-overlapping.
+
+
+**Test Case 2: Validator Failure - Door Block (Proving Necessity of V1)**
+<br>
+User Actions:
+
+1. User attempts to load a custom layout (L_BAD_V1) where a desk is intentionally positioned at (X=1.5,Y=1.5). 
+2. No LLM action is explicitly called; the validator runs automatically when addLayout is executed.
+
+<br>
+
+Analysis:
+Approach: This experiment was designed to prove the resilience of the system against a geometric impossibility. The layout deliberately placed the desk within the door_swing no-go zone (X<3.0,Y<3.0). What Worked: The system correctly intercepted the layout with the error: Failed to add layout: [Validator 1] Furniture 'MIT Desk' placed in fixed feature zone 'door_swing'. This proves the checkFixedFeatureOverlap (Validator 1) is active and prevents physically unusable outputs, regardless of whether a human or AI proposes them. What Went Wrong: The failure was the goal of the test. Issues Remain: None, the test successfully confirms that code-level geometric constraints take precedence over all user or AI input.
+
+
+**Test Case 3: Validator Failure - Missing Item (Proving Necessity of V3)**
+<br>
+User Actions:
+
+1. User attempts to load a custom layout (L_HALL) that contains only one bed_twin_xl piece, instead of the required two. 
+2. No LLM action is explicitly called; the validator runs automatically when addLayout is executed.
+
+<br>
+
+Analysis
+Approach: This test was designed to prove the system's resilience against resource violation—a common failure mode where an LLM may omit a required item to achieve a better aesthetic goal. What Worked: The system correctly failed to add the layout with the error: Failed to add layout: [Validator 3] Layout must contain exactly 2 of item bed_twin_xl, but found 1. This confirms the checkFurnitureInventory (Validator 3) is active, ensuring all solutions (AI-generated or user-generated) adhere to the MIT Housing inventory list. What Went Wrong: The failure was the goal of the test. Issues Remain: None, the test successfully confirms that resource and inventory constraints are enforced before any layout is finalized.
 
 <br>
 <br>
 <br>
 
 # <p align="center">Add Validators to Code</p>
+
+Even with the well-specified prompts, LLMs are prone to generating coordinates that are logically or physically impossible. Our three implemented validators serve as the essential security and integrity layer that protects the DormCraft application from flawed AI output. 1) Fixed Feature Obstruction: The AI is poor at spatial subtraction and may place furniture within the coordinates reserved for non-movable objects like the door swing, violating a fundamental constraint. 2) Geometric Overlap: The AI fails the bounding box check by placing two items in the same space or pushing an item outside the room's boundary, resulting in a physically impossible layout. 3) Inventory Violation: The AI ignores the resource constraint and either hallucinates extra furniture (e.g., a third dresser) or forgets to include a required item (e.g., only one desk), making the layout invalid per the Housing Office's inventory.
+
+
 
 
 **Issue: Obstruction of Fixed Features**
