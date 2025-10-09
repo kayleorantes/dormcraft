@@ -4,6 +4,8 @@ import {
 } from './dormcraft'; 
 
 import { GeminiLLM, Config } from './gemini-llm'; // Import the Config interface
+import * as path from 'path';
+import * as fs from 'fs';
 
 
 // --- Configuration Loading Function ---
@@ -11,9 +13,11 @@ import { GeminiLLM, Config } from './gemini-llm'; // Import the Config interface
  * Loads the API key configuration from config.json.
  */
 function loadConfig(): Config {
+    // Resolve path to config.json in the project root, not the dist/ folder
+    const configPath = path.resolve(__dirname, '../config.json');
     try {
-        // ASSUMPTION: config.json is in the current directory (./config.json)
-        const config = require('./config.json'); 
+        const configFile = fs.readFileSync(configPath, 'utf-8');
+        const config = JSON.parse(configFile);
         if (!config.apiKey) {
              throw new Error("config.json found but 'apiKey' is missing.");
         }
