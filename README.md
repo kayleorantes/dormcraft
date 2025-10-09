@@ -150,6 +150,8 @@ Issues Remain:
 <br>
 The LLM still requires the code's post-generation validators to ensure the coordinates are perfectly safe and non-overlapping.
 
+<br>
+<br>
 
 **Test Case 2: Validator Failure - Door Block (Proving Necessity of V1)**
 <br>
@@ -171,6 +173,8 @@ Issues Remain:
 <br>
 None, the test successfully confirms that code-level geometric constraints take precedence over all user or AI input.
 
+<br>
+<br>
 
 **Test Case 3: Validator Failure - Missing Item (Proving Necessity of V3)**
 <br>
