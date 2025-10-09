@@ -1,5 +1,5 @@
 {
-  "name": "gemini-schedule-demo",
+  "name": "mit-dormcraft",
   "version": "1.0.0",
   "description": "A demo application showing how to use Google's Gemini API to create a dorm layout application",
   "main": "dist/dormcraft_tests.js",
@@ -8,11 +8,11 @@
     "start": "npm run build && node dist/dormcraft_tests.js",
     "dev": "ts-node --transpile-only dormcraft_tests.ts",
     "test": "npm run build && node dist/dormcraft_tests.js",
-    "manual": "npm run build && node -e \"require('./dist/dormcraft_tests.js').testManualScheduling()\"",
-    "llm": "npm run build && node -e \"require('./dist/dormcraft_tests.js').testLLMScheduling()\"",
-    "mixed": "npm run build && node -e \"require('./dist/dormcraft_tests.js').testMixedScheduling()\""
+    "test:ai": "npm run build && node -e \"require('./dist/dormcraft_tests.js').testAISuggestion()\"",
+    "test:v1": "npm run build && node -e \"require('./dist/dormcraft_tests.js').testValidator1Failure()\"",
+    "test:v3": "npm run build && node -e \"require('./dist/dormcraft_tests.js').testValidator3Failure()\""
   },
-  "keywords": ["gemini", "ai", "schedule", "student", "demo", "typescript"],
+  "keywords": ["gemini", "ai", "dormcraft", "layout", "typescript"],
   "author": "Student Demo",
   "license": "MIT",
   "dependencies": {
